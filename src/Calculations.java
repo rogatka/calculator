@@ -1,58 +1,54 @@
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.math.MathContext;
+import java.util.*;
 
 public class Calculations {
     private String inputInPostfixFormat;
-    private static List<String> operators = Arrays.asList("+","-","*","/",")","(","^");
+    private static List<String> operators = Arrays.asList("+", "-", "*", "/", ")", "(", "^");
 
     public Calculations(String inputInPostfixFormat) {
         this.inputInPostfixFormat = inputInPostfixFormat;
     }
 
     public BigDecimal calculate() {
-        Stack<String> stack = new Stack<>();
+        Deque<String> deque = new ArrayDeque<>();
         BigDecimal result = new BigDecimal(0);
         for (String item : inputInPostfixFormat.split(" ")) {
             if (!operators.contains(item)) {
-                stack.push(item);
-            }
-            else {
-                BigDecimal b = new BigDecimal(stack.pop());
-                BigDecimal a = new BigDecimal(stack.pop());
+                deque.push(item);
+            } else {
+                BigDecimal b = new BigDecimal(deque.pop());
+                BigDecimal a = new BigDecimal(deque.pop());
                 switch (item) {
                     case "+": {
-                        result = a.add(b);
+                        result = a.add(b, MathContext.DECIMAL32);
                         break;
                     }
                     case "-": {
-                        result = a.subtract(b);
+                        result = a.subtract(b, MathContext.DECIMAL32);
                         break;
                     }
                     case "*": {
-                        result = a.multiply(b);
+                        result = a.multiply(b, MathContext.DECIMAL32);
                         break;
                     }
                     case "/": {
-                        try {
-                            System.out.println(a);
-                            System.out.println(b);
-                            result = a.divide(b);
-                        }
-                        catch (ArithmeticException e) {
-                            e.printStackTrace();
-                        }
+                        result = a.divide(b, MathContext.DECIMAL32);
                         break;
                     }
                     case "^": {
-                        result = a.pow(b.intValue());
+//                      если степень является вещественным числом, то используется метод класса Math:
+                        if (b.remainder(BigDecimal.valueOf(1)).compareTo(BigDecimal.ZERO) != 0) {
+                            result = BigDecimal.valueOf(Math.pow(a.doubleValue(), b.doubleValue()));
+                        }
+//                      иначе - метод класса BigDecimal, с более высокой точностью:
+                        else {
+                            result = a.pow(b.intValue(), MathContext.DECIMAL32);
+                        }
                         break;
                     }
                 }
-                System.out.println(result);
-                stack.push(String.valueOf(result));
+                deque.push(String.valueOf(result));
             }
         }
         return result;

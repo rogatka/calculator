@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class InputExpressionCheck {
-    private static List<String> operators = Arrays.asList("+","-","*","/",")","(","^");
+    private static List<String> operators = Arrays.asList("+", "-", "*", "/", ")", "(", "^");
 
     public static boolean check(String inputExpression) throws NumberOfBracketsNotEqualsException, UnaccapteableSequenceException, RepeatOperandException, UnexpectedExpressionFinishException, UnaccaptableSpacesException, EmptyExpressionException {
         Pattern pattern1 = Pattern.compile("[-+*/^(]+[+*/^.,]");
@@ -30,7 +30,7 @@ public class InputExpressionCheck {
             throw new UnaccapteableSequenceException("Вы забыли указать операнд перед скобкой!");
         }
         for (String operator : operators) {
-            if (inputExpression.endsWith(operator)) {
+            if (!operator.equals(")") && inputExpression.endsWith(operator)) {
                 throw new UnexpectedExpressionFinishException("Выражение не должно заканчиваться операндом!");
             }
         }
