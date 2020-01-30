@@ -1,6 +1,6 @@
 package exceptions;
 
-public class RepeatOperandException extends Exception {
+public class RepeatOperandException extends ExpressionCheckException {
     public RepeatOperandException(String message) {
         super(message);
     }

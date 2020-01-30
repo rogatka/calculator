@@ -1,6 +1,6 @@
 package exceptions;
 
-public class UnaccapteableSequenceException extends Exception {
+public class UnaccapteableSequenceException extends ExpressionCheckException {
     public UnaccapteableSequenceException(String message) {
         super(message);
     }

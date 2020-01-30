@@ -8,15 +8,13 @@ public class Calculator {
         while (true) {
             ConsoleHelper.writeMessage("Пожалуйста, введите выражение: ");
             try {
-                expression = ConsoleHelper.readString();
+                expression = ConsoleHelper.readString().replaceAll(" ", "");
                 if (InputExpressionCheck.check(expression)) {
                     ParseToPostfixNotation parseToPostfixNotation = new ParseToPostfixNotation(expression);
                     Calculations calculations = new Calculations(parseToPostfixNotation.parse());
                     ConsoleHelper.writeMessage("Результат вычисления: " + calculations.calculate());
                 }
-            } catch (NumberOfBracketsNotEqualsException | UnaccapteableSequenceException |
-                    RepeatOperandException | UnexpectedExpressionFinishException |
-                    UnaccaptableSpacesException | EmptyExpressionException e) {
+            } catch (ExpressionCheckException e) {
                 ConsoleHelper.writeMessage(e.getMessage());
                 ConsoleHelper.writeMessage("Повторите попытку!");
             } catch (NumberFormatException e) {
